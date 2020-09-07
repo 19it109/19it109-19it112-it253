@@ -22,8 +22,6 @@ public class Shuffle_Game extends JPanel { // our grid will be drawn in a dedica
   private int dimension;
   // Foreground Color
   private static final Color FOREGROUND_COLOR = new Color(220, 20, 30); // we use arbitrary color
-  // Random object to shuffle tiles
-  private static final Random RANDOM = new Random();
   // Storing the tiles in a 1D Array of integers
   private int[] tiles;
   // Size of tile on UI
@@ -32,7 +30,7 @@ public class Shuffle_Game extends JPanel { // our grid will be drawn in a dedica
   private int margin;
   // Grid UI Size
   private int gridSize;
-  private boolean gameOver; 
+   
   
   public Shuffle_Game(int size, int dim, int mar) {
     this.size = size;
@@ -51,52 +49,8 @@ public class Shuffle_Game extends JPanel { // our grid will be drawn in a dedica
     setBackground(Color.WHITE);
     setForeground(FOREGROUND_COLOR);
     setFont(new Font("SansSerif", Font.BOLD,60));
-    newGame();
-  }
-  
-  private void newGame() {
-    do {
-      reset(); // reset in intial state
-      shuffle(); // shuffle
-    } while(!isSolvable()); // make it until grid be solvable
     
-    gameOver = false;
   }
-  
-  private void reset() {
-    for (int i = 0; i < tiles.length; i++) {
-      tiles[i] = (i + 1) % tiles.length;
-    }
-    
-    // we set blank cell at the last
-
-  }
-  
-  private void shuffle() {
-    // don't include the blank tile in the shuffle, leave in the solved position
-    int n = nbTiles;
-    
-    while (n > 1) {
-      int r = RANDOM.nextInt(n--);
-      int tmp = tiles[r];
-      tiles[r] = tiles[n];
-      tiles[n] = tmp;
-    }
-  }
-  
-  private boolean isSolvable() {
-    int countInversions = 0;
-    
-    for (int i = 0; i < nbTiles; i++) {
-      for (int j = 0; j < i; j++) {
-        if (tiles[j] > tiles[i])
-          countInversions++;
-      }
-    }
-    
-    return countInversions % 2 == 0;
-  }
-  
   
   private void drawGrid(Graphics2D g) {
     for (int i = 0; i < tiles.length; i++) {
@@ -107,15 +61,6 @@ public class Shuffle_Game extends JPanel { // our grid will be drawn in a dedica
       int x = margin + c * tileSize;
       int y = margin + r * tileSize;
       
-      // check special case for blank tile
-      if(tiles[i] == 0) {
-        if (gameOver) {
-          g.setColor(FOREGROUND_COLOR);
-       
-        }
-        continue;
-      }
-
       // for other tiles
       g.setColor(getForeground());
       g.fillRoundRect(x, y, tileSize, tileSize, 25, 25);
