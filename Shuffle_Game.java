@@ -15,7 +15,7 @@ import javax.swing.SwingUtilities;
 
 public class Shuffle_Game extends JPanel { // our grid will be drawn in a dedicated Panel
   
-  // Size of our Game of Fifteen instance
+  // Size of our shuffle game instance
   private int size;
   // Number of tiles
   private int nbTiles;
@@ -35,8 +35,9 @@ public class Shuffle_Game extends JPanel { // our grid will be drawn in a dedica
   private int margin;
   // Grid UI Size
   private int gridSize;
+  // true if game over, false otherwise
   private boolean gameOver;
-   public static int n;// true if game over, false otherwise
+   public static int n;
   
   public Shuffle_Game(int size, int dim, int mar) {
     this.size = size;
