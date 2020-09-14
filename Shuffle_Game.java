@@ -139,7 +139,7 @@ public class Shuffle_Game extends JPanel { // our grid will be drawn in a dedica
     SwingUtilities.invokeLater(() -> {
     	JFrame frame = new JFrame();
     	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    	frame.setTitle("Game of Fifteen");
+    	frame.setTitle("Shuffle Game");
     	frame.setResizable(false);
     	String box = (String) JOptionPane.showInputDialog(null,"Please Enter value");
     	n = Integer.parseInt(box);
