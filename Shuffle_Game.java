@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Random;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
@@ -37,14 +38,21 @@ public class Shuffle_Game extends JPanel { // our grid will be drawn in a dedica
     // Grid UI Size
     private int gridSize;
     public static int n = 2;
-    private boolean gameOver; // true if game over, false otherwise
+    private boolean gameOver;
+    // true if game over, false otherwise
+    public int cnt = 1;
+    static JFrame frame = new JFrame();
+    JFrame f1 = new JFrame();
+   // JTextField l = new JTextField(20);
+    JLabel moves = new JLabel("Moves :");
+    JLabel timer = new JLabel("Timeer : ");
 
     public Shuffle_Game(int size, int dim, int mar) {
         this.size = size;
         dimension = dim;
         margin = mar;
 
-        // init tiles 
+        // init tiles
         nbTiles = size * size - 1; // -1 because we don't count blank tile
         tiles = new int[size * size];
 
@@ -68,6 +76,7 @@ public class Shuffle_Game extends JPanel { // our grid will be drawn in a dedica
                 } else {
                     // get position of the click
                     int ex = e.getX() - margin;
+
                     int ey = e.getY() - margin;
 
                     // click in the grid ?
@@ -83,7 +92,7 @@ public class Shuffle_Game extends JPanel { // our grid will be drawn in a dedica
                     int c2 = blankPos % size;
                     int r2 = blankPos / size;
 
-                    // we convert in the 1D coord 
+                    // we convert in the 1D coord
                     int clickPos = r1 * size + c1;
 
                     int dir = 0;
@@ -108,18 +117,25 @@ public class Shuffle_Game extends JPanel { // our grid will be drawn in a dedica
 
                     // we check if game is solved
                     gameOver = isSolved();
+
+                    if (dir == 1 || dir == -1 || dir == n || dir == -n) {
+                        String d = Integer.toString(cnt++);
+                        moves.setText("Moves: " + d);
+                        add(moves);
+                    }
+
                 }
 
                 // we repaint panel
                 repaint();
             }
         });
-
         newGame();
     }
 
     private void newGame() {
         do {
+
             reset(); // reset in intial state
             shuffle(); // shuffle
         } while (!isSolvable()); // make it until grid be solvable
@@ -159,6 +175,7 @@ public class Shuffle_Game extends JPanel { // our grid will be drawn in a dedica
             for (int j = 0; j < i; j++) {
                 if (tiles[j] > tiles[i]) {
                     countInversions++;
+                    System.out.println(countInversions);
                 }
             }
         }
@@ -216,10 +233,11 @@ public class Shuffle_Game extends JPanel { // our grid will be drawn in a dedica
             g.setFont(getFont().deriveFont(Font.BOLD, 18));
             g.setColor(FOREGROUND_COLOR);
             String s = "Click to start new game";
-            g.drawString(s, (getWidth() - g.getFontMetrics().stringWidth(s)) / 2,
-                    getHeight() - margin);
-
+            g.drawString(s, (getWidth() - g.getFontMetrics().stringWidth(s)) / 2, getHeight() - margin);
+            setVisible(false);
+            f1.setVisible(false);
             nextGame();
+
         }
     }
 
@@ -228,8 +246,7 @@ public class Shuffle_Game extends JPanel { // our grid will be drawn in a dedica
         FontMetrics fm = g.getFontMetrics();
         int asc = fm.getAscent();
         int desc = fm.getDescent();
-        g.drawString(s, x + (tileSize - fm.stringWidth(s)) / 2,
-                y + (asc + (tileSize - (asc + desc)) / 2));
+        g.drawString(s, x + (tileSize - fm.stringWidth(s)) / 2, y + (asc + (tileSize - (asc + desc)) / 2));
     }
 
     @Override
@@ -241,18 +258,14 @@ public class Shuffle_Game extends JPanel { // our grid will be drawn in a dedica
         drawStartMessage(g2D);
     }
 
-    static public void Timer() {
-
-    }
-
-    static public void nextGame() {
-        JFrame frame = new JFrame();
+    public static void nextGame() {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Shuffle Game");
         frame.setResizable(false);
-        
+
         n++;
-             if (n == 3) {
+        if (n == 3) {
+
             FOREGROUND_COLOR = new Color(255, 204, 51);
         } else if (n == 4) {
             FOREGROUND_COLOR = new Color(51, 153, 255);
@@ -265,18 +278,18 @@ public class Shuffle_Game extends JPanel { // our grid will be drawn in a dedica
         } else if (n == 8) {
             FOREGROUND_COLOR = new Color(255, 0, 0);
         }
-        frame.add(new Shuffle_Game(n, 800, 40), BorderLayout.CENTER);
+
+        frame.add(new Shuffle_Game(n, 800, 100), BorderLayout.CENTER);
 
         frame.pack();
-        
-        if(n>=8){
-            System.out.println("WELL DONE");
+
+        if (n >= 9) {
+
             System.exit(1);
         }
         // center on the screen
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-        
 
     }
 
@@ -287,5 +300,4 @@ public class Shuffle_Game extends JPanel { // our grid will be drawn in a dedica
 
         });
     }
-
 }
